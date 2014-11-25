@@ -26,7 +26,7 @@
                 </g:eachError>
             </ul>
             </g:hasErrors>
-            <g:form action="save" <%= multiPart ? ' enctype="multipart/form-data"' : '' %>>
+            <g:form action="save">
                 <fieldset class="form">
                     <f:all bean="${propertyName}"/>
                 </fieldset>

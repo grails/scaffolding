@@ -1,4 +1,4 @@
-description "Example description", "grails generate-all [DOMAIN CLASS]"
+description "Generates a controller and the associated views", "grails generate-all [DOMAIN CLASS]"
 
 if(args) {
     def sourceClass = source(args[0])
@@ -14,6 +14,14 @@ if(args) {
              destination: file("src/test/groovy/${model.packagePath}/${model.convention('ControllerSpec')}.groovy"),
              model: model           
 
+      render template: template('scaffolding/edit.gsp'), 
+             destination: file("grails-app/views/${model.propertyName}/edit.gsp"),
+             model: model           
+
+      render template: template('scaffolding/create.gsp'), 
+             destination: file("grails-app/views/${model.propertyName}/create.gsp"),
+             model: model   
+
       render template: template('scaffolding/index.gsp'), 
              destination: file("grails-app/views/${model.propertyName}/index.gsp"),
              model: model           
@@ -22,13 +30,6 @@ if(args) {
              destination: file("grails-app/views/${model.propertyName}/show.gsp"),
              model: model           
 
-      render template: template('scaffolding/edit.gsp'), 
-             destination: file("grails-app/views/${model.propertyName}/edit.gsp"),
-             model: model           
-
-      render template: template('scaffolding/create.gsp'), 
-             destination: file("grails-app/views/${model.propertyName}/create.gsp"),
-             model: model   
 
       addStatus "Scaffolding completed for $sourceClass"                                         
     }

@@ -1,4 +1,3 @@
-<%=packageName%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -20,7 +19,7 @@
             <g:if test="\${flash.message}">
             <div class="message" role="status">\${flash.message}</div>
             </g:if>
-            <f:display bean="${propertyName" />
+            <f:display bean="${propertyName}" />
             </ol>
             <g:form url="[resource:${propertyName}, action:'delete']" method="DELETE">
                 <fieldset class="buttons">

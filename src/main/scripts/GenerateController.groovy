@@ -1,4 +1,10 @@
-description "Example description", "grails generate-controller [DOMAIN CLASS]"
+import org.grails.cli.interactive.completers.DomainClassCompleter
+
+description( "Generates a controller that performs CRUD operations" ) {
+  usage "grails generate-controller [DOMAIN CLASS]"
+  completer DomainClassCompleter
+}
+
 
 if(args) {
     def sourceClass = source(args[0])

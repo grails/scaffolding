@@ -1,4 +1,9 @@
-description "Generates a controller and the associated views", "grails generate-all [DOMAIN CLASS]"
+import org.grails.cli.interactive.completers.DomainClassCompleter
+
+description( "Generates a controller that performs CRUD operations and the associated views" ) {
+  usage "grails generate-all [DOMAIN CLASS]"
+  completer DomainClassCompleter
+}
 
 if(args) {
     def sourceClass = source(args[0])

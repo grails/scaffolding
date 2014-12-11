@@ -48,7 +48,7 @@ if(args) {
              overwrite: overwrite
 
 
-      addStatus "Scaffolding completed for $sourceClass"                                         
+      addStatus "Scaffolding completed for ${projectPath(sourceClass)}"                                         
     }
     else {
       error "Domain class not found for name $arg"

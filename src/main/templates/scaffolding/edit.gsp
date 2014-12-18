@@ -27,15 +27,13 @@
                 </g:eachError>
             </ul>
             </g:hasErrors>
-            <g:form method="post">
-                <g:hiddenField name="id" value="\${${propertyName}?.id}" />
+            <g:form resource="\${${propertyName}}" method="PUT">
                 <g:hiddenField name="version" value="\${${propertyName}?.version}" />
                 <fieldset class="form">
                     <f:all bean="${propertyName}"/>
                 </fieldset>
                 <fieldset class="buttons">
-                    <g:actionSubmit class="save" action="update" value="\${message(code: 'default.button.update.label', default: 'Update')}" />
-                    <g:actionSubmit class="delete" action="delete" value="\${message(code: 'default.button.delete.label', default: 'Delete')}" formnovalidate="" onclick="return confirm('\${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+                    <input class="save" type="submit" value="\${message(code: 'default.button.update.label', default: 'Update')}" />
                 </fieldset>
             </g:form>
         </div>

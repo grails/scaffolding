@@ -28,10 +28,10 @@ group "org.grails.plugins"
 
 apply plugin: "org.grails.grails-plugin"
 apply plugin: "maven"
-//apply plugin: 'maven-publish'
+apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-//apply from:'https://raw.githubusercontent.com/grails/grails-profile-repository/master/profiles/plugin/templates/grailsCentralPublishing.gradle'
+apply from:'https://raw.githubusercontent.com/grails/grails-profile-repository/master/profiles/plugin/templates/grailsCentralPublishing.gradle'
 
 
 repositories {
@@ -60,6 +60,7 @@ bintray {
 
   user = u
   key = k
+  publications = ['maven']
 
   pkg {
     userOrg = "grails"

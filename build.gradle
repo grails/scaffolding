@@ -1,12 +1,10 @@
 buildscript {
     ext {
-      grailsVersion = "3.0.0.BUILD-SNAPSHOT"
+      grailsVersion = project.grailsVersion
     }
     repositories {
         mavenLocal()
-        mavenCentral()
         maven { url "http://repo.grails.org/grails/core" }
-        maven { url "http://repo.spring.io/libs-release" }
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
@@ -18,33 +16,34 @@ plugins {
 }
 
 ext {
-  grailsVersion = "3.0.0.BUILD-SNAPSHOT"
-  isJava8Compatible = org.gradle.api.JavaVersion.current().isJava8Compatible()
+  grailsVersion = project.grailsVersion
+  gradleWrapperVersion = project.gradleWrapperVersion
 }
 
-version "3.0.0-SNAPSHOT"
+version "3.0.0-TEST"
 group "org.grails.plugins"
 
+repositories {
+  mavenLocal()
+  maven { url "http://repo.grails.org/grails/core" }
+}
 
+apply plugin: "spring-boot"
 apply plugin: "org.grails.grails-plugin"
 apply plugin: "maven"
 apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply from:'https://raw.githubusercontent.com/grails/grails-profile-repository/master/profiles/plugin/templates/grailsCentralPublishing.gradle'
+apply from:'https://raw.githubusercontent.com/grails/grails-profile-repository/master/profiles/plugin/templates/bintrayPublishing.gradle'
 
-
-repositories {
-  mavenLocal()
-  mavenCentral()
-  maven { url "http://repo.grails.org/grails/core" }
-}
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 
 dependencies {
   provided "org.grails:grails-dependencies:$grailsVersion"
   provided "org.grails:grails-web-boot:$grailsVersion"
-  provided "org.grails:grails-dependencies:$grailsVersion"
   provided 'javax.servlet:javax.servlet-api:3.1.0'
 
 
@@ -52,22 +51,6 @@ dependencies {
   testCompile "org.grails:grails-plugin-testing:$grailsVersion"
 
   console "org.grails:grails-console:$grailsVersion"
-}
-
-bintray {
-  def u = System.getenv('BINTRAY_USER') ?: project.properties.get('bintrayUser')
-  def k = System.getenv("BINTRAY_KEY") ?: project.properties.get('bintrayKey')
-
-  user = u
-  key = k
-  publications = ['maven']
-
-  pkg {
-    userOrg = "grails"
-    name = "scaffolding"
-    repo = "plugins"
-    licenses = ['Apache-2.0']
-  }
 }
 
 eclipse {
@@ -81,7 +64,6 @@ idea {
         scopes.PROVIDED.plus += [configurations.provided]
     }
 }
-
 
 
 

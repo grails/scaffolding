@@ -31,7 +31,6 @@ repositories {
 
 apply plugin: "spring-boot"
 apply plugin: "org.grails.grails-plugin"
-apply plugin: "maven"
 apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 apply plugin: 'idea'

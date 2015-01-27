@@ -3,7 +3,7 @@ jdk:
 - openjdk7
 before_script:
 - rm -rf target
-script: "./travis-build.sh"
+script: ./travis-build.sh
 env:
   global:
   - GIT_NAME="Lari Hotari"
@@ -11,3 +11,6 @@ env:
   - secure: a0iT4uRpR89ah8VZD1I8RPjenuLKXlkfNdY125NXOGyvYG67mYmO1Cp9m4nhzo3wJE5vVxTwi/KlkGvSDP95K1VAyDf2Uf0jFj/eNgcq88f4Sq8sjNYWpw5ACR0uHuvugAgJd0ZaBYeYxtPrleuOsSFqcoTkniDP2kQjOtT1TUo=
   - secure: OARC6zcxlmMCJi0aKLo8vY72DRXJrDemZWgmu1isr7WkYZjdzwEPWPCVgEaJMjcTwQ99kVfOUZihpFCY7rT/N6Oo9618AOJGik8ttF8iQ22PidqxdQPDCTnKB1v3kMqBBptdCmsUb9mWR0ruPk66jr7xdot8WG7gd43yPj3KmpY=
   - secure: TREaxtaC2Pd1bERUpHUFu34uEDSiJ9pxXE9fs/+5kKrpKelihubIZMwG51EeTrXWzhV9BL/ga9QDRjL563Iy5tG/LuYAAMUdo230aZXaVgHTKMFY9WrMoYkjPH+n4yYQldOtdXtoIBiHbpZbIfhnYflc/WmUTqdvL6zP6t7+EDg=
+  - secure: LUS4ThMFjULMnyt+I8uMtYTAyrqvtx7hfSWEfgNyElbrqoxfAvYd484DAVLo9UCXEWnLvy0r862OePsWWPj3sr8eWyaLq1f1f2H9LbozzVoGshRYIXV8OVXmBFll+e52fjbw/G7+Kt401o8e/21M0yWEnaG4bkwnwUOd6GQ9Y1c=
+  - secure: gMC/xasMsFtvot+43axEP9ehW9t+uu+12KqGNKRB3MjesMWBTA4fNeReUedA3NyYq497lTS9Aqngsa46MmWy/G/c1dzBmJmVb6Juu+xak/qjIBrdJ4oSNRhWJnJKW2lHcrdhXzffRk0ZY1XwtRJ219rbWKHH6yw/poxfRPShoak=
+  - secure: iRwI7XNlOYKUU/ng9Ar2Y+b6zGegB93OlwZ6a8/kZiXBftcZ5uu8ADs1aBdUui5yWCNbz1OsvCtTvtUyyiUV2KL0xp19EVec4t+JIkW54FO8VwTEnoEHyqdVyMiSOclBHS23cPvMSy5UfzE0t9p6AoB8zXgFM8doDih3KVMLyy4=

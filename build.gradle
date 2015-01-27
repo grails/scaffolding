@@ -13,6 +13,7 @@ buildscript {
 
 plugins {
   id "com.jfrog.bintray" version "1.0"
+  id "io.spring.dependency-management" version "0.3.1.RELEASE"
 }
 
 ext {
@@ -20,7 +21,7 @@ ext {
   gradleWrapperVersion = project.gradleWrapperVersion
 }
 
-version "3.0.0-TEST"
+version "3.0.0-SNAPSHOT"
 group "org.grails.plugins"
 
 repositories {
@@ -40,17 +41,23 @@ apply from:'https://raw.githubusercontent.com/grails/grails-profile-repository/m
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
+dependencyManagement {
+    imports {
+        mavenBom "org.grails:grails-bom:$grailsVersion"
+    }
+    applyMavenExclusions false
+}
 
 dependencies {
-  provided "org.grails:grails-dependencies:$grailsVersion"
-  provided "org.grails:grails-web-boot:$grailsVersion"
-  provided 'javax.servlet:javax.servlet-api:3.1.0'
+  provided "org.grails:grails-dependencies"
+  provided "org.grails:grails-web-boot"
+  provided 'javax.servlet:javax.servlet-api'
 
 
   compile "org.grails.plugins:fields:2.0.0-SNAPSHOT"
-  testCompile "org.grails:grails-plugin-testing:$grailsVersion"
+  testCompile "org.grails:grails-plugin-testing"
 
-  console "org.grails:grails-console:$grailsVersion"
+  console "org.grails:grails-console"
 }
 
 eclipse {

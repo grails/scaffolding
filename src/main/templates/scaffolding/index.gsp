@@ -1,4 +1,3 @@
-<%=packageName%>
 <!DOCTYPE html>
 <html>
     <head>

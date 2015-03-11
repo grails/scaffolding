@@ -13,7 +13,7 @@ buildscript {
 
 plugins {
   id "com.jfrog.bintray" version "1.0"
-  id "io.spring.dependency-management" version "0.3.1.RELEASE"
+  id "io.spring.dependency-management" version "0.4.0.RELEASE"
 }
 
 ext {
@@ -21,7 +21,7 @@ ext {
   gradleWrapperVersion = project.gradleWrapperVersion
 }
 
-version "3.0.0.BUILD-SNAPSHOT"
+version "3.0.0.M2"
 group "org.grails.plugins"
 
 repositories {
@@ -29,11 +29,12 @@ repositories {
   maven { url "http://repo.grails.org/grails/core" }
 }
 
-apply plugin: "spring-boot"
-apply plugin: "org.grails.grails-plugin"
 apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
+apply plugin: "spring-boot"
+apply plugin: "org.grails.grails-plugin"
+apply plugin: "org.grails.grails-gsp"
 apply from:'https://raw.githubusercontent.com/grails/grails-profile-repository/master/profiles/plugin/templates/grailsCentralPublishing.gradle'
 apply from:'https://raw.githubusercontent.com/grails/grails-profile-repository/master/profiles/plugin/templates/bintrayPublishing.gradle'
 
@@ -70,6 +71,3 @@ idea {
         scopes.PROVIDED.plus += [configurations.provided]
     }
 }
-
-
-

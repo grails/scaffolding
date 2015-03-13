@@ -1,4 +1,4 @@
-<%=packageName ? "package ${packageName}\n\n" : ''%>
+<%=packageName ? "package ${packageName}" : ''%>
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional

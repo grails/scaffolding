@@ -1,4 +1,4 @@
-<%=packageName ? "package ${packageName}\n\n" : ''%>
+<%=packageName ? "package ${packageName}" : ''%>
 
 import grails.test.mixin.*
 import spock.lang.*

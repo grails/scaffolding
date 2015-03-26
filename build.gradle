@@ -21,7 +21,7 @@ ext {
   gradleWrapperVersion = project.gradleWrapperVersion
 }
 
-version "3.0.1-SNAPSHOT"
+version "3.0.1"
 group "org.grails.plugins"
 
 repositories {
@@ -54,7 +54,7 @@ dependencies {
   provided 'javax.servlet:javax.servlet-api'
 
 
-  compile "org.grails.plugins:fields:2.0.0.M1"
+  compile "org.grails.plugins:fields:2.0.0"
   testCompile "org.grails:grails-plugin-testing"
 
   console "org.grails:grails-console"

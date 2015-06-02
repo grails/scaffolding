@@ -20,7 +20,6 @@
             <div class="message" role="status">\${flash.message}</div>
             </g:if>
             <f:display bean="${propertyName}" />
-            </ol>
             <g:form resource="\${${propertyName}}" method="DELETE">
                 <fieldset class="buttons">
                     <g:link class="edit" action="edit" resource="\${${propertyName}}"><g:message code="default.button.edit.label" default="Edit" /></g:link>

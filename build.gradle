@@ -21,7 +21,7 @@ ext {
   gradleWrapperVersion = project.gradleWrapperVersion
 }
 
-version "3.0.3-SNAPSHOT"
+version "3.0.3"
 group "org.grails.plugins"
 
 repositories {

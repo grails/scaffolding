@@ -5,6 +5,7 @@ import grails.io.IOUtils
 import groovy.text.GStringTemplateEngine
 import groovy.text.Template
 import groovy.transform.CompileStatic
+import org.grails.buffer.*
 import org.grails.web.servlet.mvc.GrailsWebRequest
 import org.grails.web.servlet.view.GroovyPageView
 import org.grails.web.servlet.view.GroovyPageViewResolver
@@ -53,13 +54,17 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
                         def viewGenerator = new GStringTemplateEngine()
                         Template t = viewGenerator.createTemplate(res.URL)
 
-                        def contents = new StringWriter()
+                        def contents = new FastStringWriter()
                         t.make(model.asMap()).writeTo(contents)
-                        def template = templateEngine.createTemplate(new ByteArrayResource(contents.toString().bytes, "view:$viewName"))
+                        
+                        def template = templateEngine.createTemplate(new ByteArrayResource(contents.toString().getBytes(templateEngine.gspEncoding), "view:$viewName"))
                         view = new GroovyPageView()
+                        view.setServletContext(getServletContext())
                         view.setTemplate(template)
+                        view.setApplicationContext(getApplicationContext())
                         view.setTemplateEngine(templateEngine)
                         view.afterPropertiesSet()
+                        generatedViewCache[viewName] = view
                         return view
                     }
                     else {

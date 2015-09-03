@@ -2,6 +2,8 @@ package grails.plugin.scaffolding
 
 import grails.codegen.model.ModelBuilder
 import grails.io.IOUtils
+import grails.util.BuildSettings
+import grails.util.Environment
 import groovy.text.GStringTemplateEngine
 import groovy.text.Template
 import groovy.transform.CompileStatic
@@ -11,6 +13,7 @@ import org.grails.web.servlet.view.GroovyPageView
 import org.grails.web.servlet.view.GroovyPageViewResolver
 import org.springframework.context.ResourceLoaderAware
 import org.springframework.core.io.ByteArrayResource
+import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
 import org.springframework.core.io.UrlResource
@@ -43,8 +46,17 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
                 def scaffoldValue = controllerClass?.getPropertyValue("scaffold")
                 if(scaffoldValue instanceof Class) {
                     def shortViewName = viewName.substring(viewName.lastIndexOf('/') + 1)
-                    def url = IOUtils.findResourceRelativeToClass(controllerClass.clazz, "/META-INF/templates/scaffolding/${shortViewName}.gsp")
-                    Resource res = url ? new UrlResource(url) : null
+                    Resource res = null
+
+                    if(Environment.isDevelopmentMode()) {
+                        res = new FileSystemResource(new File(BuildSettings.BASE_DIR, "src/main/templates/scaffolding/${shortViewName}.gsp"))
+                    }
+
+                    if(!res?.exists()) {
+                        def url = IOUtils.findResourceRelativeToClass(controllerClass.clazz, "/META-INF/templates/scaffolding/${shortViewName}.gsp")
+                        res = url ? new UrlResource(url) : null
+                    }
+
                     if(!res.exists()) {
                         res = resourceLoader.getResource("classpath:META-INF/templates/scaffolding/${shortViewName}.gsp")
                     }

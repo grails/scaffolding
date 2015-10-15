@@ -32,10 +32,6 @@ import static java.lang.reflect.Modifier.STATIC
 @CompileStatic
 class ScaffoldingControllerInjector implements GrailsArtefactClassInjector {
 
-
-    public static final ClassNode LIST_TYPE = new ClassNode(List).getPlainNodeReference()
-    public static final ConstantExpression HTML_FORMAT = new ConstantExpression("html")
-    public static final String PROPERTY_RESPONSE_FORMATS = "responseFormats"
     public static final String PROPERTY_SCAFFOLD = "scaffold"
 
     final String[] artefactTypes = [ControllerArtefactHandler.TYPE] as String[]
@@ -54,7 +50,6 @@ class ScaffoldingControllerInjector implements GrailsArtefactClassInjector {
     void performInjectionOnAnnotatedClass(SourceUnit source, ClassNode classNode) {
         def propertyNode = classNode.getProperty(PROPERTY_SCAFFOLD)
 
-
         def expression = propertyNode?.getInitialExpression()
         if(expression instanceof ClassExpression) {
 
@@ -63,13 +58,6 @@ class ScaffoldingControllerInjector implements GrailsArtefactClassInjector {
             if(currentSuperClass.equals( GrailsASTUtils.OBJECT_CLASS_NODE )) {
                 def domainClass = ((ClassExpression) expression).getType()
                 classNode.setSuperClass(GrailsASTUtils.nonGeneric(superClassNode, domainClass))
-                final publicStaticFinal = PUBLIC | STATIC | FINAL
-                def responseFormatsProperty = classNode.getProperty(PROPERTY_RESPONSE_FORMATS)
-                if(responseFormatsProperty == null) {
-                    ListExpression responseFormatsExpression = new ListExpression()
-                    responseFormatsExpression.addExpression(HTML_FORMAT)
-                    classNode.addProperty(PROPERTY_RESPONSE_FORMATS, publicStaticFinal, LIST_TYPE, responseFormatsExpression, null, null)
-                }
                 new ResourceTransform().addConstructor(classNode, domainClass, false)
             }
             else {

@@ -7,15 +7,15 @@ filename=$(find build/libs -name "*.jar" | head -1)
 filename=$(basename "$filename")
 
 EXIT_STATUS=0
-echo "Publishing archives for branch $TRAVIS_BRANCH"
+echo "Publishing archives for branch $TRAVIS_BRANCH?"
 if [[ -n $TRAVIS_TAG ]] || [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
 
-  echo "Publishing archives"
 
   if [[ -n $TRAVIS_TAG ]]; then
-      ./gradlew bintrayUpload --stacktrace || EXIT_STATUS=$?
+      echo "Publishing archives"
+      ./gradlew bintrayUpload || EXIT_STATUS=$?
   else
-      ./gradlew publish --stacktrace || EXIT_STATUS=$?
+      echo "No tag present. Not publishing"
   fi
 fi
 

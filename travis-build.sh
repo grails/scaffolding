@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 rm -rf *.zip
-./gradlew clean test assemble --stacktrace
+./gradlew clean test assemble
 
 filename=$(find build/libs -name "*.jar" | head -1)
 filename=$(basename "$filename")
@@ -13,9 +13,9 @@ if [[ -n $TRAVIS_TAG ]] || [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST
   echo "Publishing archives"
 
   if [[ -n $TRAVIS_TAG ]]; then
-      ./gradlew bintrayUpload || EXIT_STATUS=$?
+      ./gradlew bintrayUpload || EXIT_STATUS=$? --stacktrace
   else
-      ./gradlew publish || EXIT_STATUS=$?
+      ./gradlew publish || EXIT_STATUS=$? --stacktrace
   fi
 fi
 

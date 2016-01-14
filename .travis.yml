@@ -5,8 +5,7 @@ cache:
 language: groovy
 jdk:
 - openjdk7
-before_script:
-- rm -rf target
+install: true
 script: ./travis-build.sh
 env:
   global:

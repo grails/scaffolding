@@ -12,31 +12,21 @@ if(args) {
     if(args[0] == '*') {
         classNames = resources("file:grails-app/domain/**/*.groovy").collect { className(it) }
     }
+    def viewNames = resources("file:src/main/templates/scaffolding/*.gsp").collect {
+        it.filename
+    }
+
     for(arg in classNames) {
         def sourceClass = source(arg)
         def overwrite = flag('force') ? true : false
         if(sourceClass) {
             def model = model(sourceClass)
-            render template: template('scaffolding/edit.gsp'),
-                    destination: file("grails-app/views/${model.propertyName}/edit.gsp"),
-                    model: model,
-                    overwrite: overwrite
-
-            render template: template('scaffolding/create.gsp'),
-                    destination: file("grails-app/views/${model.propertyName}/create.gsp"),
-                    model: model,
-                    overwrite: overwrite
-
-            render template: template('scaffolding/index.gsp'),
-                    destination: file("grails-app/views/${model.propertyName}/index.gsp"),
-                    model: model,
-                    overwrite: overwrite
-
-            render template: template('scaffolding/show.gsp'),
-                    destination: file("grails-app/views/${model.propertyName}/show.gsp"),
-                    model: model,
-                    overwrite: overwrite
-
+            viewNames.each {
+                render template: template('scaffolding/'+it),
+                        destination: file("grails-app/views/${model.propertyName}/"+it),
+                        model: model,
+                        overwrite: overwrite
+            }
 
             addStatus "Views generated for ${projectPath(sourceClass)}"
         } else {

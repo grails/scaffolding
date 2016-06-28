@@ -60,7 +60,7 @@ class ScaffoldingControllerInjector implements GrailsArtefactClassInjector {
                 classNode.setSuperClass(GrailsASTUtils.nonGeneric(superClassNode, domainClass))
                 new ResourceTransform().addConstructor(classNode, domainClass, false)
             }
-            else {
+            else if( ! currentSuperClass.isDerivedFrom(superClassNode)) {
                GrailsASTUtils.error(source, classNode, "Scaffolded controllers (${classNode.name}) cannot extend other classes: ${currentSuperClass.getName()}", true)
             }
         }

@@ -1,7 +1,10 @@
 package grails.plugin.scaffolding
 
 import grails.codegen.model.ModelBuilder
+import grails.core.GrailsControllerClass
+import grails.core.support.GrailsApplicationAware
 import grails.io.IOUtils
+import grails.core.GrailsApplication
 import grails.util.BuildSettings
 import grails.util.Environment
 import groovy.text.GStringTemplateEngine
@@ -26,10 +29,29 @@ import java.util.concurrent.ConcurrentHashMap
  * @since 3.1
  */
 @CompileStatic
-class ScaffoldingViewResolver extends GroovyPageViewResolver implements ResourceLoaderAware, ModelBuilder {
+class ScaffoldingViewResolver extends GroovyPageViewResolver implements ResourceLoaderAware, ModelBuilder, GrailsApplicationAware {
 
+    GrailsApplication grailsApplication
     ResourceLoader resourceLoader
     protected Map<String, View> generatedViewCache = new ConcurrentHashMap<>()
+
+    private Resource findViewResourceForTemplateSet(GrailsControllerClass controllerClass, String shortViewName, String templateSet) throws Exception {
+        Resource res = null
+        if(Environment.isDevelopmentMode()) {
+            res = new FileSystemResource(new File(BuildSettings.BASE_DIR, "src/main/templates/${templateSet}/${shortViewName}.gsp"))
+        }
+
+        if(!res?.exists()) {
+            def url = IOUtils.findResourceRelativeToClass(controllerClass.clazz, "/META-INF/templates/${templateSet}/${shortViewName}.gsp")
+            res = url ? new UrlResource(url) : null
+        }
+
+        if(!res.exists()) {
+            res = resourceLoader.getResource("classpath:META-INF/templates/${templateSet}/${shortViewName}.gsp")
+        }
+
+        return res
+    }
 
     @Override
     protected View loadView(String viewName, Locale locale) throws Exception {
@@ -44,22 +66,14 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
                 def controllerClass = webR.controllerClass
 
                 def scaffoldValue = controllerClass?.getPropertyValue("scaffold")
+                String scaffoldTemplatesValue = controllerClass?.getPropertyValue("scaffoldTemplates")
+                if (!scaffoldTemplatesValue)
+                    scaffoldTemplatesValue = grailsApplication.config.getProperty("grails.plugin.scaffolding.defaultTemplateSet")
                 if(scaffoldValue instanceof Class) {
                     def shortViewName = viewName.substring(viewName.lastIndexOf('/') + 1)
-                    Resource res = null
-
-                    if(Environment.isDevelopmentMode()) {
-                        res = new FileSystemResource(new File(BuildSettings.BASE_DIR, "src/main/templates/scaffolding/${shortViewName}.gsp"))
-                    }
-
-                    if(!res?.exists()) {
-                        def url = IOUtils.findResourceRelativeToClass(controllerClass.clazz, "/META-INF/templates/scaffolding/${shortViewName}.gsp")
-                        res = url ? new UrlResource(url) : null
-                    }
-
-                    if(!res.exists()) {
-                        res = resourceLoader.getResource("classpath:META-INF/templates/scaffolding/${shortViewName}.gsp")
-                    }
+                    Resource res = scaffoldTemplatesValue?findViewResourceForTemplateSet(controllerClass, shortViewName, scaffoldTemplatesValue):null
+                    if (!res || !res.exists())
+                        res = findViewResourceForTemplateSet(controllerClass, shortViewName, "scaffolding")
 
                     if(res.exists()) {
                         def model = model((Class)scaffoldValue)
@@ -68,7 +82,7 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
 
                         def contents = new FastStringWriter()
                         t.make(model.asMap()).writeTo(contents)
-                        
+
                         def template = templateEngine.createTemplate(new ByteArrayResource(contents.toString().getBytes(templateEngine.gspEncoding), "view:$viewName"))
                         view = new GroovyPageView()
                         view.setServletContext(getServletContext())
@@ -79,12 +93,9 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
                         generatedViewCache[viewName] = view
                         return view
                     }
-                    else {
-                        return view
-                    }
-
+                    else
+                        return null
                 }
-
             }
         }
         return view

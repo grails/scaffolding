@@ -79,7 +79,7 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
                         def contents = new FastStringWriter()
                         t.make(model.asMap()).writeTo(contents)
                         
-                        def template = templateEngine.createTemplate(new ByteArrayResource(contents.toString().getBytes(templateEngine.gspEncoding), "view:$viewName"))
+                        def template = templateEngine.createTemplate(new ByteArrayResource(contents.toString().getBytes(templateEngine.gspEncoding), "view:$cacheKey"))
                         view = new GroovyPageView()
                         view.setServletContext(getServletContext())
                         view.setTemplate(template)

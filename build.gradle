@@ -1,7 +1,4 @@
 buildscript {
-    ext {
-      grailsVersion = project.grailsVersion
-    }
     repositories {
         mavenLocal()
         maven { url "http://repo.grails.org/grails/core" }
@@ -11,17 +8,7 @@ buildscript {
     }
 }
 
-plugins {
-  id "com.jfrog.bintray" version "1.2"
-  id "io.spring.dependency-management" version "0.5.2.RELEASE"
-}
-
-ext {
-  grailsVersion = project.grailsVersion
-  gradleWrapperVersion = project.gradleWrapperVersion
-}
-
-version "3.2.2-SNAPSHOT"
+version "3.3.0.BUILD-SNAPSHOT"
 group "org.grails.plugins"
 
 repositories {
@@ -29,14 +16,11 @@ repositories {
   maven { url "http://repo.grails.org/grails/core" }
 }
 
-apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: "spring-boot"
 apply plugin: "org.grails.grails-plugin"
 apply plugin: "org.grails.grails-gsp"
-apply from:'https://raw.githubusercontent.com/grails/grails-profile-repository/master/profiles/plugin/templates/grailsCentralPublishing.gradle'
-apply from:'https://raw.githubusercontent.com/grails/grails-profile-repository/master/profiles/plugin/templates/bintrayPublishing.gradle'
+apply plugin: "org.grails.grails-plugin-publish"
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -60,14 +44,14 @@ dependencies {
   console "org.grails:grails-console"
 }
 
-eclipse {
-    classpath {
-        plusConfigurations += [configurations.provided]
-    }
-}
 
-idea {
-    module {
-        scopes.PROVIDED.plus += [configurations.provided]
+grailsPublish {
+    userOrg = "grails"
+    githubSlug = 'grails3-plugins/grails-scaffolding'
+    license {
+        name = 'Apache-2.0'
     }
+    title = "Grails Scaffolding Plugin"
+    desc = "Provides scaffolding for Grails applications"
+    developers = [graemerocher: "Graeme Rocher"]
 }

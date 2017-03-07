@@ -31,11 +31,21 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
     ResourceLoader resourceLoader
     protected Map<String, View> generatedViewCache = new ConcurrentHashMap<>()
 
+    protected String buildCacheKey(String viewName) {
+        String viewCacheKey = groovyPageLocator.resolveViewFormat(viewName)
+        String currentControllerKeyPrefix = resolveCurrentControllerKeyPrefixes(viewName.startsWith("/"))
+        if (currentControllerKeyPrefix != null) {
+            viewCacheKey = currentControllerKeyPrefix + ':' + viewCacheKey
+        }
+        viewCacheKey
+    }
+
     @Override
     protected View loadView(String viewName, Locale locale) throws Exception {
         def view = super.loadView(viewName, locale)
         if(view == null) {
-            view = generatedViewCache[viewName]
+            String cacheKey = buildCacheKey(viewName)
+            view = generatedViewCache.get(cacheKey)
             if(view != null) {
                 return view
             }
@@ -76,7 +86,7 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
                         view.setApplicationContext(getApplicationContext())
                         view.setTemplateEngine(templateEngine)
                         view.afterPropertiesSet()
-                        generatedViewCache[viewName] = view
+                        generatedViewCache.put(cacheKey, view)
                         return view
                     }
                     else {

@@ -15,7 +15,7 @@ if [[ -n $TRAVIS_TAG ]] || [[ $TRAVIS_BRANCH =~ ^master|[3]\..\.x$ && $TRAVIS_PU
       echo "Publishing archives"
       ./gradlew bintrayUpload || EXIT_STATUS=$?
   else
-      echo "No tag present. Not publishing"
+      ./gradlew publish || EXIT_STATUS=$?
   fi
 fi
 

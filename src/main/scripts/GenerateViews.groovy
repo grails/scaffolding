@@ -12,10 +12,17 @@ if(args) {
     if(args[0] == '*') {
         classNames = resources("file:grails-app/domain/**/*.groovy").collect { className(it) }
     }
-    def viewNames = resources("file:src/main/templates/scaffolding/*.gsp").collect {
+    def viewNames = resources("file:src/main/templates/scaffolding/*.gsp")
+                .collect {
         it.filename
     }
-
+    if(!viewNames) {
+       viewNames = resources("classpath*:META-INF/templates/scaffolding/*.gsp")
+                   .collect {
+            it.filename
+       } 
+    }
+    
     for(arg in classNames) {
         def sourceClass = source(arg)
         def overwrite = flag('force') ? true : false

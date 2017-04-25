@@ -8,7 +8,8 @@ buildscript {
     }
 }
 
-version "3.3.3.BUILD-SNAPSHOT"
+// version "3.3.4.BUILD-SNAPSHOT"
+version "3.3.3"
 group "org.grails.plugins"
 
 repositories {

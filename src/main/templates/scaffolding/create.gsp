@@ -25,7 +25,7 @@
                 </g:eachError>
             </ul>
             </g:hasErrors>
-            <g:form action="save">
+            <g:form resource="\${this.${propertyName}}" method="POST">
                 <fieldset class="form">
                     <f:all bean="${propertyName}"/>
                 </fieldset>

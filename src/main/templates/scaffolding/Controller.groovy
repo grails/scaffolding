@@ -1,41 +1,39 @@
 <%=packageName ? "package ${packageName}" : ''%>
 
+import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
-import grails.transaction.Transactional
 
-@Transactional(readOnly = true)
 class ${className}Controller {
+
+    ${className}Service ${propertyName}Service
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond ${className}.list(params), model:[${propertyName}Count: ${className}.count()]
+        respond ${propertyName}Service.list(params), model:[${propertyName}Count: ${propertyName}Service.count()]
     }
 
-    def show(${className} ${propertyName}) {
-        respond ${propertyName}
+    def show(Long id) {
+        respond ${propertyName}Service.get(id)
     }
 
     def create() {
         respond new ${className}(params)
     }
 
-    @Transactional
     def save(${className} ${propertyName}) {
         if (${propertyName} == null) {
-            transactionStatus.setRollbackOnly()
             notFound()
             return
         }
 
-        if (${propertyName}.hasErrors()) {
-            transactionStatus.setRollbackOnly()
+        try {
+            ${propertyName}Service.save(${propertyName})
+        } catch (ValidationException e) {
             respond ${propertyName}.errors, view:'create'
             return
         }
-
-        ${propertyName}.save flush:true
 
         request.withFormat {
             form multipartForm {
@@ -46,25 +44,22 @@ class ${className}Controller {
         }
     }
 
-    def edit(${className} ${propertyName}) {
-        respond ${propertyName}
+    def edit(Long id) {
+        respond ${propertyName}Service.get(id)
     }
 
-    @Transactional
     def update(${className} ${propertyName}) {
         if (${propertyName} == null) {
-            transactionStatus.setRollbackOnly()
             notFound()
             return
         }
 
-        if (${propertyName}.hasErrors()) {
-            transactionStatus.setRollbackOnly()
+        try {
+            ${propertyName}Service.save(${propertyName})
+        } catch (ValidationException e) {
             respond ${propertyName}.errors, view:'edit'
             return
         }
-
-        ${propertyName}.save flush:true
 
         request.withFormat {
             form multipartForm {
@@ -75,20 +70,17 @@ class ${className}Controller {
         }
     }
 
-    @Transactional
-    def delete(${className} ${propertyName}) {
-
-        if (${propertyName} == null) {
-            transactionStatus.setRollbackOnly()
+    def delete(Long id) {
+        if (id == null) {
             notFound()
             return
         }
 
-        ${propertyName}.delete flush:true
+        ${propertyName}Service.delete(id)
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: '${propertyName}.label', default: '${className}'), ${propertyName}.id])
+                flash.message = message(code: 'default.deleted.message', args: [message(code: '${propertyName}.label', default: '${className}'), id])
                 redirect action:"index", method:"GET"
             }
             '*'{ render status: NO_CONTENT }

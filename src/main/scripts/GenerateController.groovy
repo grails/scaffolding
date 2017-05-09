@@ -23,8 +23,18 @@ if(args) {
              model: model,
              overwrite: overwrite
 
+      render template: template('scaffolding/Service.groovy'),
+              destination: file("grails-app/services/${model.packagePath}/${model.convention('Service')}.groovy"),
+              model: model,
+              overwrite: overwrite
+
       render template: template('scaffolding/Spec.groovy'), 
              destination: file("src/test/groovy/${model.packagePath}/${model.convention('ControllerSpec')}.groovy"),
+             model: model,
+             overwrite: overwrite
+
+      render template: template('scaffolding/ServiceSpec.groovy'),
+             destination: file("src/integration-test/groovy/${model.packagePath}/${model.convention('ServiceSpec')}.groovy"),
              model: model,
              overwrite: overwrite
 

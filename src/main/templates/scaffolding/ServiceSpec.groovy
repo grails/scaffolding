@@ -9,6 +9,7 @@ import spock.lang.Specification
 class ${className}ServiceSpec extends Specification {
 
     ${className}Service ${propertyName}Service
+    SessionFactory sessionFactory
 
     private Long setupData() {
         // TODO: Populate valid domain instances and return a valid ID
@@ -54,6 +55,7 @@ class ${className}ServiceSpec extends Specification {
 
         when:
         ${propertyName}Service.delete(${propertyName}Id)
+        sessionFactory.currentSession.flush()
 
         then:
         ${propertyName}Service.count() == 4

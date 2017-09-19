@@ -4,7 +4,7 @@ cache:
     - $HOME/.gradle
 language: groovy
 jdk:
-- openjdk7
+- openjdk8
 install: true
 script: ./travis-build.sh
 env:

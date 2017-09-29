@@ -1,12 +1,11 @@
 <%=packageName ? "package ${packageName}" : ''%>
 
-import grails.test.mixin.*
+import grails.testing.gorm.DomainUnitTest
+import grails.testing.web.controllers.ControllerUnitTest
 import grails.validation.ValidationException
 import spock.lang.*
 
-@TestFor(${className}Controller)
-@Mock(${className})
-class ${className}ControllerSpec extends Specification {
+class ${className}ControllerSpec extends Specification implements ControllerUnitTest<${className}Controller>, DomainUnitTest<${className}> {
 
     def populateValidParams(params) {
         assert params != null

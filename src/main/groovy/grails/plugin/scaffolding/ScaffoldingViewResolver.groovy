@@ -7,16 +7,12 @@ import grails.util.Environment
 import groovy.text.GStringTemplateEngine
 import groovy.text.Template
 import groovy.transform.CompileStatic
-import org.grails.buffer.*
+import org.grails.buffer.FastStringWriter
 import org.grails.web.servlet.mvc.GrailsWebRequest
 import org.grails.web.servlet.view.GroovyPageView
 import org.grails.web.servlet.view.GroovyPageViewResolver
 import org.springframework.context.ResourceLoaderAware
-import org.springframework.core.io.ByteArrayResource
-import org.springframework.core.io.FileSystemResource
-import org.springframework.core.io.Resource
-import org.springframework.core.io.ResourceLoader
-import org.springframework.core.io.UrlResource
+import org.springframework.core.io.*
 import org.springframework.web.servlet.View
 
 import java.util.concurrent.ConcurrentHashMap
@@ -27,6 +23,39 @@ import java.util.concurrent.ConcurrentHashMap
  */
 @CompileStatic
 class ScaffoldingViewResolver extends GroovyPageViewResolver implements ResourceLoaderAware, ModelBuilder {
+    final Class templateOverridePluginDescriptor
+
+    public ScaffoldingViewResolver() {
+        this.templateOverridePluginDescriptor = null
+    }
+
+    /**
+     * This constructor allows a plugin to override the default templates provided by the Scaffolding
+     * plugin.  The plugin that contains the template override should be configured to load AFTER the
+     * scaffolding plugin.  An example implementation follows:
+     *
+     * <pre>
+     * {@code
+     * def loadAfter = ['scaffolding']
+     * }
+     * </pre>
+     * ...
+     * <pre>
+     * {@code
+     * @Override
+     * Closure doWithSpring() { { ->
+     *    jspViewResolver(ScaffoldingViewResolver, this.class) { bean ->
+     *        bean.lazyInit = true
+     *        bean.parent = "abstractViewResolver"
+     *    }
+     * }}
+     * </pre>
+     *
+     * @param templateOverridePluginDescriptor
+     */
+    public ScaffoldingViewResolver(Class templateOverridePluginDescriptor) {
+        this.templateOverridePluginDescriptor = templateOverridePluginDescriptor
+    }
 
     ResourceLoader resourceLoader
     protected Map<String, View> generatedViewCache = new ConcurrentHashMap<>()
@@ -43,42 +72,46 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
     @Override
     protected View loadView(String viewName, Locale locale) throws Exception {
         def view = super.loadView(viewName, locale)
-        if(view == null) {
+        if (view == null) {
             String cacheKey = buildCacheKey(viewName)
             view = generatedViewCache.get(cacheKey)
-            if(view != null) {
+            if (view != null) {
                 return view
-            }
-            else {
+            } else {
                 def webR = GrailsWebRequest.lookup()
                 def controllerClass = webR.controllerClass
 
                 def scaffoldValue = controllerClass?.getPropertyValue("scaffold")
-                if(scaffoldValue instanceof Class) {
+                if (scaffoldValue instanceof Class) {
                     def shortViewName = viewName.substring(viewName.lastIndexOf('/') + 1)
                     Resource res = null
 
-                    if(Environment.isDevelopmentMode()) {
+                    if (Environment.isDevelopmentMode()) {
                         res = new FileSystemResource(new File(BuildSettings.BASE_DIR, "src/main/templates/scaffolding/${shortViewName}.gsp"))
                     }
 
-                    if(!res?.exists()) {
+                    if (!res?.exists()) {
                         def url = IOUtils.findResourceRelativeToClass(controllerClass.clazz, "/META-INF/templates/scaffolding/${shortViewName}.gsp")
                         res = url ? new UrlResource(url) : null
                     }
 
-                    if(!res.exists()) {
+                    if (!res.exists() && templateOverridePluginDescriptor) {
+                        def url = IOUtils.findResourceRelativeToClass(templateOverridePluginDescriptor, "/META-INF/templates/scaffolding/${shortViewName}.gsp")
+                        res = url ? new UrlResource(url) : null
+                    }
+
+                    if (!res.exists()) {
                         res = resourceLoader.getResource("classpath:META-INF/templates/scaffolding/${shortViewName}.gsp")
                     }
 
-                    if(res.exists()) {
-                        def model = model((Class)scaffoldValue)
+                    if (res.exists()) {
+                        def model = model((Class) scaffoldValue)
                         def viewGenerator = new GStringTemplateEngine()
                         Template t = viewGenerator.createTemplate(res.URL)
 
                         def contents = new FastStringWriter()
                         t.make(model.asMap()).writeTo(contents)
-                        
+
                         def template = templateEngine.createTemplate(new ByteArrayResource(contents.toString().getBytes(templateEngine.gspEncoding), "view:$cacheKey"))
                         view = new GroovyPageView()
                         view.setServletContext(getServletContext())
@@ -88,8 +121,7 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
                         view.afterPropertiesSet()
                         generatedViewCache.put(cacheKey, view)
                         return view
-                    }
-                    else {
+                    } else {
                         return view
                     }
 

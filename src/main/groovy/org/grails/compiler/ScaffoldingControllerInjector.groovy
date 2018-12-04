@@ -7,20 +7,12 @@ import groovy.transform.CompileStatic
 import org.codehaus.groovy.ast.ClassHelper
 import org.codehaus.groovy.ast.ClassNode
 import org.codehaus.groovy.ast.expr.ClassExpression
-import org.codehaus.groovy.ast.expr.ConstantExpression
-import org.codehaus.groovy.ast.expr.Expression
-import org.codehaus.groovy.ast.expr.ListExpression
 import org.codehaus.groovy.classgen.GeneratorContext
 import org.codehaus.groovy.control.SourceUnit
 import org.grails.compiler.injection.GrailsASTUtils
 import org.grails.compiler.web.ControllerActionTransformer
 import org.grails.core.artefact.ControllerArtefactHandler
 import org.grails.plugins.web.rest.transform.ResourceTransform
-
-import static java.lang.reflect.Modifier.FINAL
-import static java.lang.reflect.Modifier.PUBLIC
-import static java.lang.reflect.Modifier.STATIC
-
 /**
  * Transformation that turns a controller into a scaffolding controller at compile time of 'static scaffold = Foo'
  * is specified
@@ -53,7 +45,7 @@ class ScaffoldingControllerInjector implements GrailsArtefactClassInjector {
         def expression = propertyNode?.getInitialExpression()
         if(expression instanceof ClassExpression) {
 
-            ClassNode<?> superClassNode = ClassHelper.make(RestfulController).getPlainNodeReference()
+            ClassNode superClassNode = ClassHelper.make(RestfulController).getPlainNodeReference()
             def currentSuperClass = classNode.getSuperClass()
             if(currentSuperClass.equals( GrailsASTUtils.OBJECT_CLASS_NODE )) {
                 def domainClass = ((ClassExpression) expression).getType()

@@ -63,6 +63,6 @@ class ScaffoldingControllerInjector implements GrailsArtefactClassInjector {
 
     @Override
     boolean shouldInject(URL url) {
-        return url != null && ControllerActionTransformer.CONTROLLER_PATTERN.matcher(url.getFile()).find();
+        return url != null && ControllerActionTransformer.CONTROLLER_PATTERN.matcher(url.getFile()).find()
     }
 }

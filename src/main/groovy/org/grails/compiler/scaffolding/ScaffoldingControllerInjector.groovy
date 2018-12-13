@@ -1,4 +1,4 @@
-package org.grails.compiler
+package org.grails.compiler.scaffolding
 
 import grails.compiler.ast.AstTransformer
 import grails.compiler.ast.GrailsArtefactClassInjector

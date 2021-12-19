@@ -3,11 +3,9 @@
 Grails Scaffolding
 ===========
 
+The Grails® framework Scaffolding plugin replicates 
+
 Scaffolding plugin for Grails 3. Replicates much of the functionality from Grails 2, but uses the fields plugin instead.
 
+Please check the [Grails Plugin Portal](https://plugins.grails.org) for the latest available version.
 
-The 3.2.x releases are for Grails versions before 3.2.7
-
-The 3.3.x releases are for Grails version 3.2.7 and later
-
-THe 3.4.x releases require GORM 6.1 and Grails version 3.2.7

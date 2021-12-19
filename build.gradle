@@ -1,27 +1,25 @@
 buildscript {
     repositories {
-        mavenLocal()
-        maven { url "http://repo.grails.org/grails/core" }
+        maven { url "https://repo.grails.org/grails/core" }
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
     }
 }
 
-version "4.0.0.BUILD-SNAPSHOT"
-//version "3.4.1"
+version project.projectVersion
 group "org.grails.plugins"
 
 repositories {
-  mavenLocal()
-  maven { url "http://repo.grails.org/grails/core" }
+  maven { url "https://repo.grails.org/grails/core" }
 }
 
+apply plugin: 'java-library'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: "org.grails.grails-plugin"
 apply plugin: "org.grails.grails-gsp"
-apply plugin: "org.grails.grails-plugin-publish"
+apply plugin: "org.grails.internal.grails-plugin-publish"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -34,13 +32,13 @@ dependencyManagement {
 }
 
 dependencies {
-  provided "org.grails:grails-dependencies"
-  provided "org.grails:grails-web-boot"
-  provided 'javax.servlet:javax.servlet-api'
+  api "org.grails:grails-dependencies"
+  api "org.grails:grails-web-boot"
+  api 'javax.servlet:javax.servlet-api'
 
 
-  compile "org.grails.plugins:fields:$fieldsVersion"
-  testCompile "org.grails:grails-plugin-testing"
+  api "org.grails.plugins:fields:$fieldsVersion"
+  testImplementation "org.grails:grails-plugin-testing"
 
   console "org.grails:grails-console"
 }
@@ -54,5 +52,5 @@ grailsPublish {
     }
     title = "Grails Scaffolding Plugin"
     desc = "Provides scaffolding for Grails applications"
-    developers = [graemerocher: "Graeme Rocher"]
+    developers = [graemerocher: "Graeme Rocher", puneetbehl: "Puneet Behl"]
 }

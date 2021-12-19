@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/grails3-plugins/scaffolding.svg)](https://travis-ci.org/grails3-plugins/scaffolding)
+[![Java CI](https://github.com/grails/scaffolding/actions/workflows/gradle.yml/badge.svg)](https://github.com/grails/scaffolding/actions/workflows/gradle.yml)
 
 Grails Scaffolding
 ===========

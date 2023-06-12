@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: ['8', '11']
+        java: ['11']
     env:
       WORKSPACE: ${{ github.workspace }}
       GRADLE_OPTS: -Xmx1500m -Dfile.encoding=UTF-8
@@ -46,14 +46,14 @@ jobs:
       - name: Publish to repo.grails.org
         id: publish
         uses: gradle/gradle-build-action@v2
-        if: steps.build.outcome == 'success' && github.event_name == 'push' && matrix.java == '8'
+        if: steps.build.outcome == 'success' && github.event_name == 'push' && matrix.java == '11'
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
         with:
           arguments: -Dorg.gradle.internal.publish.checksums.insecure=true publish
       - name: Publish to Github Pages
-        if: steps.publish.outcome == 'success' && github.event_name == 'push' && matrix.java == '8'
+        if: steps.publish.outcome == 'success' && github.event_name == 'push' && matrix.java == '11'
         uses: micronaut-projects/github-pages-deploy-action@master
         env:
           TARGET_REPOSITORY: ${{ steps.docs_target.outputs.value }}

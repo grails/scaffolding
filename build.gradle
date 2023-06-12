@@ -1,10 +1,10 @@
-buildscript {
-    repositories {
-        maven { url "https://repo.grails.org/grails/core" }
-    }
-    dependencies {
-        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-    }
+plugins {
+    id 'java-library'
+    id 'eclipse'
+    id 'idea'
+    id 'org.grails.grails-plugin'
+    id 'org.grails.grails-gsp'
+    id 'org.grails.internal.grails-plugin-publish'
 }
 
 version project.projectVersion
@@ -13,13 +13,6 @@ group "org.grails.plugins"
 repositories {
   maven { url "https://repo.grails.org/grails/core" }
 }
-
-apply plugin: 'java-library'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: "org.grails.grails-plugin"
-apply plugin: "org.grails.grails-gsp"
-apply plugin: "org.grails.internal.grails-plugin-publish"
 
 sourceCompatibility = 1.11
 targetCompatibility = 1.11
@@ -46,11 +39,11 @@ dependencies {
 
 grailsPublish {
     userOrg = "grails"
-    githubSlug = 'grails3-plugins/grails-scaffolding'
+    githubSlug = 'grails/scaffolding'
     license {
         name = 'Apache-2.0'
     }
     title = "Grails Scaffolding Plugin"
     desc = "Provides scaffolding for Grails applications"
-    developers = [graemerocher: "Graeme Rocher", puneetbehl: "Puneet Behl"]
+    developers = [puneetbehl: "Puneet Behl"]
 }

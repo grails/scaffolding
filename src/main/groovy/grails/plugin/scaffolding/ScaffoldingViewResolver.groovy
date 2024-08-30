@@ -2,6 +2,7 @@ package grails.plugin.scaffolding
 
 import grails.codegen.model.ModelBuilder
 import grails.io.IOUtils
+import grails.plugin.scaffolding.annotation.ScaffoldController
 import grails.util.BuildSettings
 import grails.util.Environment
 import groovy.text.GStringTemplateEngine
@@ -82,6 +83,14 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
                 def controllerClass = webR.controllerClass
 
                 def scaffoldValue = controllerClass?.getPropertyValue("scaffold")
+                if (!scaffoldValue) {
+                    ScaffoldController scaffoldAnnotation = controllerClass?.clazz?.getAnnotation(ScaffoldController)
+                    scaffoldValue = scaffoldAnnotation?.domain()
+                    if (scaffoldValue == Void) {
+                        scaffoldValue = null
+                    }
+                }
+
                 if (scaffoldValue instanceof Class) {
                     def shortViewName = viewName.substring(viewName.lastIndexOf('/') + 1)
                     Resource res = null

@@ -29,8 +29,7 @@ dependencies {
   api "org.grails:grails-web-boot"
   api 'javax.servlet:javax.servlet-api'
 
-
-  api "org.grails.plugins:fields:$fieldsVersion"
+  api "io.github.gpc:fields:$fieldsVersion"
 
   console "org.grails:grails-console"
 }

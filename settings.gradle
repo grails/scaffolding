@@ -1,37 +1,26 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenCentral()
-    }
-}
-
 plugins {
-    id "com.gradle.enterprise" version "3.17.1"
-    id 'com.gradle.common-custom-user-data-gradle-plugin' version '1.13'
+    id 'com.gradle.develocity' version '3.18'
+    id 'com.gradle.common-custom-user-data-gradle-plugin' version '2.0.2'
 }
 
-gradleEnterprise {
+def isCI = System.getenv('CI') != null
+def isLocal = !isCI
+def isAuthenticated = System.getenv('DEVELOCITY_ACCESS_KEY') != null
+
+develocity {
     server = 'https://ge.grails.org'
     buildScan {
-        publishAlways()
-        publishIfAuthenticated()
-        uploadInBackground = System.getenv("CI") == null
-        capture {
-            taskInputFiles = true
-        }
+        publishing.onlyIf { isAuthenticated }
+        uploadInBackground = isLocal
     }
 }
 
 buildCache {
-    local { enabled = System.getenv('CI') != 'true' }
-    remote(HttpBuildCache) {
-        push = System.getenv('CI') == 'true'
+    local { enabled = isLocal }
+    remote(develocity.buildCache) {
+        push = isCI && isAuthenticated
         enabled = true
-        url = 'https://ge.grails.org/cache/'
-        credentials {
-            username = System.getenv('GRADLE_ENTERPRISE_BUILD_CACHE_NODE_USER')
-            password = System.getenv('GRADLE_ENTERPRISE_BUILD_CACHE_NODE_KEY')
-        }
-    }}
+    }
+}
 
 rootProject.name='scaffolding'

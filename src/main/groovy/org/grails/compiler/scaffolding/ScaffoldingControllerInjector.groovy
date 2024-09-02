@@ -16,7 +16,7 @@ import org.grails.core.artefact.ControllerArtefactHandler
 import org.grails.plugins.web.rest.transform.ResourceTransform
 
 /**
- * Transformation that turns a controller into a scaffolding controller at compile time of 'static scaffold = Foo'
+ * Transformation that turns a controller into a scaffolding controller at compile time if 'static scaffold = Foo'
  * is specified
  *
  * @author Graeme Rocher
@@ -47,12 +47,20 @@ class ScaffoldingControllerInjector implements GrailsArtefactClassInjector {
 
         def expression = propertyNode?.getInitialExpression()
         if (expression instanceof ClassExpression || annotationNode) {
-            ClassNode superClassNode = ClassHelper.make(annotationNode?.getMember("value")?.type?.getTypeClass()?:RestfulController).getPlainNodeReference()
-            def currentSuperClass = classNode.getSuperClass()
+            ClassNode controllerClassNode = annotationNode?.getMember("value")?.type
+            ClassNode superClassNode = ClassHelper.make(controllerClassNode?.getTypeClass()?:RestfulController).getPlainNodeReference()
+            ClassNode currentSuperClass = classNode.getSuperClass()
             if (currentSuperClass.equals(GrailsASTUtils.OBJECT_CLASS_NODE)) {
                 def domainClass = expression? ((ClassExpression) expression).getType() : null
                 if (!domainClass) {
                     domainClass = annotationNode.getMember("domain")?.type
+                    if (!domainClass) {
+                        domainClass = extractGenericDomainClass(controllerClassNode)
+                        if (domainClass) {
+                            // set the domain value on the annotation so that ScaffoldingViewResolver can identify the domain object.
+                            annotationNode.addMember("domain", new ClassExpression(domainClass))
+                        }
+                    }
                     if (!domainClass) {
                         GrailsASTUtils.error(source, classNode, "Scaffolded controller (${classNode.name}) with @ScaffoldController does not have domain class set.", true)
                     }
@@ -65,6 +73,14 @@ class ScaffoldingControllerInjector implements GrailsArtefactClassInjector {
         } else if (propertyNode != null) {
             GrailsASTUtils.error(source, propertyNode, "The 'scaffold' property must refer to a domain class.", true)
         }
+    }
+
+    protected static ClassNode extractGenericDomainClass(ClassNode controllerClassNode) {
+        def genericsTypes = controllerClassNode?.genericsTypes
+        if (genericsTypes && genericsTypes.length > 0) {
+            return genericsTypes[0].type
+        }
+        return null
     }
 
     @Override

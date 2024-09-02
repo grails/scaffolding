@@ -5,3 +5,4 @@ build/
 *.ipr
 # Ignore Gradle GUI config
 gradle-app.setting
+.DS_Store

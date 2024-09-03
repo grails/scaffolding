@@ -10,4 +10,5 @@ import java.lang.annotation.Target;
 public @interface ScaffoldService {
     Class<?> value() default Void.class;
     Class<?> domain() default Void.class;
+    boolean readOnly() default false;
 }

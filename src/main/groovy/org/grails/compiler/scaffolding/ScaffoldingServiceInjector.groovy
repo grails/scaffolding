@@ -6,6 +6,7 @@ import grails.plugin.scaffolding.annotation.ScaffoldService
 import groovy.transform.CompileStatic
 import org.codehaus.groovy.ast.ClassHelper
 import org.codehaus.groovy.ast.ClassNode
+import org.codehaus.groovy.ast.expr.ConstantExpression
 import org.codehaus.groovy.classgen.GeneratorContext
 import org.codehaus.groovy.control.SourceUnit
 import org.grails.compiler.injection.GrailsASTUtils
@@ -57,7 +58,8 @@ class ScaffoldingServiceInjector implements GrailsArtefactClassInjector {
                     GrailsASTUtils.error(source, classNode, "Scaffolded service (${classNode.name}) with @ScaffoldService does not have domain class set.", true)
                 }
                 classNode.setSuperClass(GrailsASTUtils.nonGeneric(superClassNode, domainClass))
-                new ResourceTransform().addConstructor(classNode, domainClass, false)
+                def readOnlyExpression = (ConstantExpression) annotationNode.getMember("readOnly")
+                new ResourceTransform().addConstructor(classNode, domainClass, readOnlyExpression?.getValue()?.asBoolean()?:false)
             } else if (!currentSuperClass.isDerivedFrom(superClassNode)) {
                GrailsASTUtils.error(source, classNode, "Scaffolded services (${classNode.name}) cannot extend other classes: ${currentSuperClass.getName()}", true)
             }

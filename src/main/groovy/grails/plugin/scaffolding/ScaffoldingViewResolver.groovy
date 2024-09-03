@@ -9,7 +9,6 @@ import groovy.text.GStringTemplateEngine
 import groovy.text.Template
 import groovy.transform.CompileStatic
 import org.grails.buffer.FastStringWriter
-import org.grails.compiler.scaffolding.ScaffoldingControllerInjector
 import org.grails.web.servlet.mvc.GrailsWebRequest
 import org.grails.web.servlet.view.GroovyPageView
 import org.grails.web.servlet.view.GroovyPageViewResolver
@@ -17,8 +16,6 @@ import org.springframework.context.ResourceLoaderAware
 import org.springframework.core.io.*
 import org.springframework.web.servlet.View
 
-import java.lang.reflect.ParameterizedType
-import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
 
 /**

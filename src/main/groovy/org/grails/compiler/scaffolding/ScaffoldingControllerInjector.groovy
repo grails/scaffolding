@@ -67,7 +67,6 @@ class ScaffoldingControllerInjector implements GrailsArtefactClassInjector {
                     }
                 }
                 classNode.setSuperClass(GrailsASTUtils.nonGeneric(superClassNode, domainClass))
-
                 def readOnlyExpression = (ConstantExpression) annotationNode.getMember("readOnly")
                 new ResourceTransform().addConstructor(classNode, domainClass, readOnlyExpression?.getValue()?.asBoolean()?:false)
             } else if (!currentSuperClass.isDerivedFrom(superClassNode)) {

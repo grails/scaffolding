@@ -2,6 +2,7 @@ package org.grails.compiler.scaffolding
 
 import grails.compiler.ast.AstTransformer
 import grails.compiler.ast.GrailsArtefactClassInjector
+import grails.plugin.scaffolding.GenericService
 import grails.plugin.scaffolding.annotation.Scaffold
 import groovy.transform.CompileStatic
 import org.codehaus.groovy.ast.ClassHelper
@@ -46,8 +47,7 @@ class ScaffoldingServiceInjector implements GrailsArtefactClassInjector {
         def annotationNode = classNode.getAnnotations(ClassHelper.make(Scaffold)).find()
         if (annotationNode) {
             ClassNode serviceClassNode = annotationNode?.getMember("value")?.type
-            Class serviceClass = serviceClassNode?.getTypeClass()
-            ClassNode superClassNode = ClassHelper.make(serviceClass).getPlainNodeReference()
+            ClassNode superClassNode = ClassHelper.make(serviceClassNode?.getTypeClass()?:GenericService).getPlainNodeReference()
             ClassNode currentSuperClass = classNode.getSuperClass()
             if (currentSuperClass.equals(GrailsASTUtils.OBJECT_CLASS_NODE)) {
                 def domainClass = annotationNode.getMember("domain")?.type

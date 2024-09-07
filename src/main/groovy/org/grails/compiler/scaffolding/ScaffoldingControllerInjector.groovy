@@ -2,7 +2,7 @@ package org.grails.compiler.scaffolding
 
 import grails.compiler.ast.AstTransformer
 import grails.compiler.ast.GrailsArtefactClassInjector
-import grails.plugin.scaffolding.annotation.ScaffoldController
+import grails.plugin.scaffolding.annotation.Scaffold
 import grails.rest.RestfulController
 import groovy.transform.CompileStatic
 import org.codehaus.groovy.ast.ClassHelper
@@ -44,7 +44,7 @@ class ScaffoldingControllerInjector implements GrailsArtefactClassInjector {
     @Override
     void performInjectionOnAnnotatedClass(SourceUnit source, ClassNode classNode) {
         def propertyNode = classNode.getProperty(PROPERTY_SCAFFOLD)
-        def annotationNode = classNode.getAnnotations(ClassHelper.make(ScaffoldController)).find()
+        def annotationNode = classNode.getAnnotations(ClassHelper.make(Scaffold)).find()
 
         def expression = propertyNode?.getInitialExpression()
         if (expression instanceof ClassExpression || annotationNode) {
@@ -63,7 +63,7 @@ class ScaffoldingControllerInjector implements GrailsArtefactClassInjector {
                         }
                     }
                     if (!domainClass) {
-                        GrailsASTUtils.error(source, classNode, "Scaffolded controller (${classNode.name}) with @ScaffoldController does not have domain class set.", true)
+                        GrailsASTUtils.error(source, classNode, "Scaffolded controller (${classNode.name}) with @Scaffold does not have domain class set.", true)
                     }
                 }
                 classNode.setSuperClass(GrailsASTUtils.nonGeneric(superClassNode, domainClass))

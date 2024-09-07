@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface ScaffoldController {
+public @interface Scaffold {
     Class<?> value() default Void.class;
     Class<?> domain() default Void.class;
     boolean readOnly() default false;

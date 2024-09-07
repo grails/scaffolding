@@ -2,7 +2,7 @@ package org.grails.compiler.scaffolding
 
 import grails.compiler.ast.AstTransformer
 import grails.compiler.ast.GrailsArtefactClassInjector
-import grails.plugin.scaffolding.annotation.ScaffoldService
+import grails.plugin.scaffolding.annotation.Scaffold
 import groovy.transform.CompileStatic
 import org.codehaus.groovy.ast.ClassHelper
 import org.codehaus.groovy.ast.ClassNode
@@ -43,7 +43,7 @@ class ScaffoldingServiceInjector implements GrailsArtefactClassInjector {
 
     @Override
     void performInjectionOnAnnotatedClass(SourceUnit source, ClassNode classNode) {
-        def annotationNode = classNode.getAnnotations(ClassHelper.make(ScaffoldService)).find()
+        def annotationNode = classNode.getAnnotations(ClassHelper.make(Scaffold)).find()
         if (annotationNode) {
             ClassNode serviceClassNode = annotationNode?.getMember("value")?.type
             Class serviceClass = serviceClassNode?.getTypeClass()
@@ -55,7 +55,7 @@ class ScaffoldingServiceInjector implements GrailsArtefactClassInjector {
                     domainClass = ScaffoldingControllerInjector.extractGenericDomainClass(serviceClassNode)
                 }
                 if (!domainClass) {
-                    GrailsASTUtils.error(source, classNode, "Scaffolded service (${classNode.name}) with @ScaffoldService does not have domain class set.", true)
+                    GrailsASTUtils.error(source, classNode, "Scaffolded service (${classNode.name}) with @Scaffold does not have domain class set.", true)
                 }
                 classNode.setSuperClass(GrailsASTUtils.nonGeneric(superClassNode, domainClass))
                 def readOnlyExpression = (ConstantExpression) annotationNode.getMember("readOnly")

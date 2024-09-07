@@ -7,9 +7,9 @@ import grails.util.Holders
 
 @Artefact("Controller")
 @ReadOnly
-class GenericController<T> extends RestfulController<T> {
+class RestfulServiceController<T> extends RestfulController<T> {
 
-    GenericController(Class<T> resource, boolean readOnly) {
+    RestfulServiceController(Class<T> resource, boolean readOnly) {
         super(resource, readOnly)
     }
 

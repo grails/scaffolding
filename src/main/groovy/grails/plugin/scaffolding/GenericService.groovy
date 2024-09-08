@@ -1,20 +1,25 @@
 package grails.plugin.scaffolding
 
 import grails.artefact.Artefact
+import grails.gorm.api.GormAllOperations
 import grails.gorm.transactions.ReadOnly
+import grails.gorm.transactions.Transactional
 import grails.util.GrailsNameUtils
+import groovy.transform.CompileStatic
+import org.grails.datastore.gorm.GormEntity
 
 @Artefact("Service")
 @ReadOnly
-class GenericService<T> {
+@CompileStatic
+class GenericService<T extends GormEntity<T>> {
 
-    Class<T> resource
+    GormAllOperations<T> resource
     String resourceName
     String resourceClassName
     boolean readOnly
 
     GenericService(Class<T> resource, boolean readOnly) {
-        this.resource = resource
+        this.resource = (GormAllOperations<T>) resource.getDeclaredConstructor().newInstance()
         this.readOnly = readOnly
         resourceClassName = resource.simpleName
         resourceName = GrailsNameUtils.getPropertyName(resource)
@@ -36,11 +41,19 @@ class GenericService<T> {
         resource.count()
     }
 
+    @Transactional
     void delete(Serializable id) {
+        if (readOnly) {
+            return
+        }
         queryForResource(id).delete flush: true
     }
 
+    @Transactional
     T save(T instance) {
+        if (readOnly) {
+            return instance
+        }
         instance.save flush: true
     }
 }

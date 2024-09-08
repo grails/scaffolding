@@ -19,7 +19,7 @@ class GenericService<T extends GormEntity<T>> {
     boolean readOnly
 
     GenericService(Class<T> resource, boolean readOnly) {
-        this.resource = (GormAllOperations<T>) resource.getDeclaredConstructor().newInstance()
+        this.resource = resource.getDeclaredConstructor().newInstance() as GormAllOperations<T>
         this.readOnly = readOnly
         resourceClassName = resource.simpleName
         resourceName = GrailsNameUtils.getPropertyName(resource)

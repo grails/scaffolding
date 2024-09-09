@@ -11,14 +11,14 @@ import org.grails.datastore.gorm.GormEntity
 @Artefact("Service")
 @ReadOnly
 @CompileStatic
-class GenericService<T extends GormEntity<T>> {
+class GormService<T extends GormEntity<T>> {
 
     GormAllOperations<T> resource
     String resourceName
     String resourceClassName
     boolean readOnly
 
-    GenericService(Class<T> resource, boolean readOnly) {
+    GormService(Class<T> resource, boolean readOnly) {
         this.resource = resource.getDeclaredConstructor().newInstance() as GormAllOperations<T>
         this.readOnly = readOnly
         resourceClassName = resource.simpleName

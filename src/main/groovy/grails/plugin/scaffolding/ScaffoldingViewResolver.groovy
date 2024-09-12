@@ -71,7 +71,7 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
     }
 
     private Resource resolveResource(Class controllerClass, shortViewName) {
-        Resource resource = null
+        Resource resource
         if (Environment.isDevelopmentMode()) {
             resource = new FileSystemResource(new File(BuildSettings.BASE_DIR, "src/main/templates/scaffolding/${shortViewName}.gsp"))
             if (resource.exists()) {

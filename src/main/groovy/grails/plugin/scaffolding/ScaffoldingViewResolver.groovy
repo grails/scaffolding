@@ -71,23 +71,28 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
     }
 
     private Resource resolveResource(Class controllerClass, shortViewName) {
-        Resource res = null
+        Resource resource = null
         if (Environment.isDevelopmentMode()) {
-            res = new FileSystemResource(new File(BuildSettings.BASE_DIR, "src/main/templates/scaffolding/${shortViewName}.gsp"))
+            resource = new FileSystemResource(new File(BuildSettings.BASE_DIR, "src/main/templates/scaffolding/${shortViewName}.gsp"))
+            if (resource.exists()) {
+                return resource
+            }
         }
 
-        if (!res?.exists()) {
-            def url = IOUtils.findResourceRelativeToClass(controllerClass, "/META-INF/templates/scaffolding/${shortViewName}.gsp")
-            res = url? new UrlResource(url) : null
-            if (templateOverridePluginDescriptor && !res?.exists()) {
-                url = IOUtils.findResourceRelativeToClass(templateOverridePluginDescriptor, "/META-INF/templates/scaffolding/${shortViewName}.gsp")
-                res = url ? new UrlResource(url) : null
-            }
-            if (!res?.exists()) {
-                res = resourceLoader.getResource("classpath:META-INF/templates/scaffolding/${shortViewName}.gsp")
+        def url = IOUtils.findResourceRelativeToClass(controllerClass, "/META-INF/templates/scaffolding/${shortViewName}.gsp")
+        resource = url? new UrlResource(url) : null
+        if (resource?.exists()) {
+            return resource
+        }
+
+        if (templateOverridePluginDescriptor) {
+            url = IOUtils.findResourceRelativeToClass(templateOverridePluginDescriptor, "/META-INF/templates/scaffolding/${shortViewName}.gsp")
+            resource = url? new UrlResource(url) : null
+            if (resource?.exists()) {
+                return resource
             }
         }
-        res
+        resourceLoader.getResource("classpath:META-INF/templates/scaffolding/${shortViewName}.gsp")
     }
 
     @Override

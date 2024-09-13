@@ -10,7 +10,7 @@ import org.grails.datastore.gorm.GormEntity
 
 @Artefact("Service")
 @ReadOnly
-//@CompileStatic
+@CompileStatic
 class GormService<T extends GormEntity<T>> {
 
     GormAllOperations<T> resource
@@ -46,7 +46,7 @@ class GormService<T extends GormEntity<T>> {
         if (readOnly) {
             return
         }
-        queryForResource(id).delete flush: true
+        resource.delete(queryForResource(id), [flush: true])
     }
 
     @Transactional
@@ -54,6 +54,6 @@ class GormService<T extends GormEntity<T>> {
         if (readOnly) {
             return instance
         }
-        instance.save flush: true
+        resource.save(instance, [flush: true])
     }
 }

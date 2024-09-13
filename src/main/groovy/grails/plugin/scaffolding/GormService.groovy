@@ -10,7 +10,7 @@ import org.grails.datastore.gorm.GormEntity
 
 @Artefact("Service")
 @ReadOnly
-@CompileStatic
+//@CompileStatic
 class GormService<T extends GormEntity<T>> {
 
     GormAllOperations<T> resource

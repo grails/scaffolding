@@ -11,11 +11,15 @@ version project.projectVersion
 group "org.grails.plugins"
 
 repositories {
-  maven { url "https://repo.grails.org/grails/core" }
+    mavenCentral()
+    maven { url "https://repo.grails.org/grails/core" }
 }
 
-sourceCompatibility = 1.11
-targetCompatibility = 1.11
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
 
 dependencyManagement {
     imports {
@@ -43,4 +47,14 @@ grailsPublish {
     title = "Grails Scaffolding Plugin"
     desc = "Provides scaffolding for Grails applications"
     developers = [puneetbehl: "Puneet Behl"]
+}
+
+allprojects {
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == "io.micronaut" && details.requested.name == "micronaut-inject-groovy") {
+                details.useVersion(micronautVersion)
+            }
+        }
+    }
 }

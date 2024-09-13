@@ -26,7 +26,6 @@ dependencyManagement {
 dependencies {
   api 'org.grails:grails-dependencies'
   api 'org.grails:grails-web-boot'
-  api 'javax.servlet:javax.servlet-api'
 
   api "io.github.gpc:fields:$fieldsVersion"
 

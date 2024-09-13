@@ -2,6 +2,7 @@ package grails.plugin.scaffolding
 
 import grails.codegen.model.ModelBuilder
 import grails.io.IOUtils
+import grails.plugin.scaffolding.annotation.Scaffold
 import grails.util.BuildSettings
 import grails.util.Environment
 import groovy.text.GStringTemplateEngine
@@ -69,6 +70,31 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
         viewCacheKey
     }
 
+    private Resource resolveResource(Class controllerClass, shortViewName) {
+        Resource resource
+        if (Environment.isDevelopmentMode()) {
+            resource = new FileSystemResource(new File(BuildSettings.BASE_DIR, "src/main/templates/scaffolding/${shortViewName}.gsp"))
+            if (resource.exists()) {
+                return resource
+            }
+        }
+
+        def url = IOUtils.findResourceRelativeToClass(controllerClass, "/META-INF/templates/scaffolding/${shortViewName}.gsp")
+        resource = url? new UrlResource(url) : null
+        if (resource?.exists()) {
+            return resource
+        }
+
+        if (templateOverridePluginDescriptor) {
+            url = IOUtils.findResourceRelativeToClass(templateOverridePluginDescriptor, "/META-INF/templates/scaffolding/${shortViewName}.gsp")
+            resource = url? new UrlResource(url) : null
+            if (resource?.exists()) {
+                return resource
+            }
+        }
+        resourceLoader.getResource("classpath:META-INF/templates/scaffolding/${shortViewName}.gsp")
+    }
+
     @Override
     protected View loadView(String viewName, Locale locale) throws Exception {
         def view = super.loadView(viewName, locale)
@@ -82,28 +108,20 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
                 def controllerClass = webR.controllerClass
 
                 def scaffoldValue = controllerClass?.getPropertyValue("scaffold")
+                if (!scaffoldValue) {
+                    Scaffold scaffoldAnnotation = controllerClass?.clazz?.getAnnotation(Scaffold)
+                    scaffoldValue = scaffoldAnnotation?.domain()
+                    if (scaffoldValue == Void) {
+                        scaffoldValue = null
+                    }
+                }
+
                 if (scaffoldValue instanceof Class) {
                     def shortViewName = viewName.substring(viewName.lastIndexOf('/') + 1)
-                    Resource res = null
-
-                    if (Environment.isDevelopmentMode()) {
-                        res = new FileSystemResource(new File(BuildSettings.BASE_DIR, "src/main/templates/scaffolding/${shortViewName}.gsp"))
-                    }
-
+                    Resource res = controllerClass.namespace? resolveResource(controllerClass.clazz, "${controllerClass.namespace}/${shortViewName}") : null
                     if (!res?.exists()) {
-                        def url = IOUtils.findResourceRelativeToClass(controllerClass.clazz, "/META-INF/templates/scaffolding/${shortViewName}.gsp")
-                        res = url ? new UrlResource(url) : null
+                        res = resolveResource(controllerClass.clazz, shortViewName)
                     }
-
-                    if (!res.exists() && templateOverridePluginDescriptor) {
-                        def url = IOUtils.findResourceRelativeToClass(templateOverridePluginDescriptor, "/META-INF/templates/scaffolding/${shortViewName}.gsp")
-                        res = url ? new UrlResource(url) : null
-                    }
-
-                    if (!res.exists()) {
-                        res = resourceLoader.getResource("classpath:META-INF/templates/scaffolding/${shortViewName}.gsp")
-                    }
-
                     if (res.exists()) {
                         def model = model((Class) scaffoldValue)
                         def viewGenerator = new GStringTemplateEngine()
@@ -124,9 +142,7 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
                     } else {
                         return view
                     }
-
                 }
-
             }
         }
         return view

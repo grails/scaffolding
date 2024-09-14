@@ -1,7 +1,8 @@
 package grails.plugin.scaffolding
 
 import grails.plugins.*
-import org.grails.web.servlet.view.GroovyPageViewResolver
+import grails.util.Environment
+import grails.util.Metadata
 
 class ScaffoldingGrailsPlugin extends Plugin {
 
@@ -38,10 +39,14 @@ Plugin that generates scaffolded controllers and views for a Grails application.
 
     @Override
     Closure doWithSpring() { {->
+        Environment env = Environment.current
+        boolean reloadEnabled = env.isReloadEnabled() || (Metadata.getCurrent().isDevelopmentEnvironmentAvailable() && env == Environment.DEVELOPMENT)
+
         // Configure a Spring MVC view resolver
         jspViewResolver(ScaffoldingViewResolver) { bean ->
             bean.lazyInit = true
             bean.parent = "abstractViewResolver"
+            enableReload = reloadEnabled
         }
     }}
 }

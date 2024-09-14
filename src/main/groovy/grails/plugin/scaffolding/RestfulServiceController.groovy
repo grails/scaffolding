@@ -4,6 +4,7 @@ import grails.artefact.Artefact
 import grails.gorm.transactions.ReadOnly
 import grails.rest.RestfulController
 import grails.util.Holders
+import org.grails.datastore.gorm.GormEntityApi
 
 @Artefact("Controller")
 @ReadOnly
@@ -38,6 +39,6 @@ class RestfulServiceController<T> extends RestfulController<T> {
     }
 
     protected void deleteResource(T resource) {
-        getService().delete(resource)
+        getService().delete(((GormEntityApi) resource).ident())
     }
 }

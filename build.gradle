@@ -32,7 +32,7 @@ dependencies {
   api "org.grails:grails-dependencies"
   api "org.grails:grails-web-boot"
 
-  api "io.github.gpc:fields:$fieldsVersion"
+  api "org.grails.plugins:fields:$fieldsVersion"
 
   console "org.grails:grails-console"
 }

@@ -1,0 +1,4 @@
+grails.plugin.scaffolding
+grails.plugin.scaffolding.annotation
+org.grails.compiler.scaffolding
+scaffolding

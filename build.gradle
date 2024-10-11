@@ -1,21 +1,20 @@
 plugins {
     id 'java-library'
-    id 'eclipse'
-    id 'idea'
     id 'org.grails.grails-plugin'
     id 'org.grails.grails-gsp'
     id 'org.grails.internal.grails-plugin-publish'
 }
 
-version project.projectVersion
-group "org.grails.plugins"
+version = project.projectVersion
+group = 'org.grails.plugins'
 
 repositories {
-  maven { url "https://repo.grails.org/grails/core" }
+    maven { url = 'https://repo.grails.org/grails/core' }
 }
 
-sourceCompatibility = 1.11
-targetCompatibility = 1.11
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+}
 
 dependencyManagement {
     imports {
@@ -25,18 +24,19 @@ dependencyManagement {
 }
 
 dependencies {
-    compileOnly "org.codehaus.groovy:groovy"
-    compileOnly "org.grails:grails-plugin-rest"
     api "org.grails.plugins:fields:$fieldsVersion"
+
+    compileOnly 'org.codehaus.groovy:groovy'
+    compileOnly 'org.grails:grails-plugin-rest'
 }
 
 grailsPublish {
-    userOrg = "grails"
+    userOrg = 'grails'
     githubSlug = 'grails/scaffolding'
     license {
         name = 'Apache-2.0'
     }
-    title = "Grails Scaffolding Plugin"
-    desc = "Provides scaffolding for Grails applications"
-    developers = [puneetbehl: "Puneet Behl"]
+    title = 'Grails Scaffolding Plugin'
+    desc = 'Provides scaffolding for Grails applications'
+    developers = [puneetbehl: 'Puneet Behl']
 }

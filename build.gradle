@@ -25,14 +25,10 @@ dependencyManagement {
 }
 
 dependencies {
-  api "org.grails:grails-dependencies"
-  api "org.grails:grails-web-boot"
-
-  api "org.grails.plugins:fields:$fieldsVersion"
-
-  console "org.grails:grails-console"
+    compileOnly "org.codehaus.groovy:groovy"
+    compileOnly "org.grails:grails-plugin-rest"
+    api "org.grails.plugins:fields:$fieldsVersion"
 }
-
 
 grailsPublish {
     userOrg = "grails"

@@ -18,7 +18,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'librca'
+          distribution: 'liberica'
           java-version: '11'
       - name: Run Build
         uses: gradle/gradle-build-action@v3
@@ -37,7 +37,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'librca'
+          distribution: 'liberica'
           java-version: '11'
       - name: Publish Artifacts (repo.grails.org)
         id: publish

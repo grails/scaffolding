@@ -9,7 +9,7 @@ version = project.projectVersion
 group = 'org.grails.plugins'
 
 repositories {
-  maven { url = 'https://repo.grails.org/grails/core' }
+    maven { url = 'https://repo.grails.org/grails/core' }
 }
 
 java {
@@ -24,9 +24,10 @@ dependencyManagement {
 }
 
 dependencies {
-    compileOnly "org.codehaus.groovy:groovy"
-    compileOnly "org.grails:grails-plugin-rest"
     api "org.grails.plugins:fields:$fieldsVersion"
+
+    compileOnly 'org.codehaus.groovy:groovy'
+    compileOnly 'org.grails:grails-plugin-rest'
 }
 
 grailsPublish {

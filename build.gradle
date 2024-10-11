@@ -29,14 +29,9 @@ dependencyManagement {
 }
 
 dependencies {
-  api "org.grails:grails-dependencies"
-  api "org.grails:grails-web-boot"
-
-  api "org.grails.plugins:fields:$fieldsVersion"
-
-  console "org.grails:grails-console"
+    compileOnly "org.grails:grails-plugin-rest"
+    api "org.grails.plugins:fields:$fieldsVersion"
 }
-
 
 grailsPublish {
     userOrg = "grails"
@@ -47,14 +42,4 @@ grailsPublish {
     title = "Grails Scaffolding Plugin"
     desc = "Provides scaffolding for Grails applications"
     developers = [puneetbehl: "Puneet Behl"]
-}
-
-allprojects {
-    configurations.configureEach {
-        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-            if (details.requested.group == "io.micronaut" && details.requested.name == "micronaut-inject-groovy") {
-                details.useVersion(micronautVersion)
-            }
-        }
-    }
 }

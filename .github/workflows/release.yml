@@ -14,7 +14,7 @@ jobs:
       - name: "☕️ Setup JDK"
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
+          distribution: liberica
           java-version: 11
       - name: "🐘 Setup Gradle"
         uses: gradle/actions/setup-gradle@v4

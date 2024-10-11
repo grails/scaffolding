@@ -19,14 +19,14 @@ jobs:
       - name: "☕️ Setup JDK"
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
+          distribution: liberica
           java-version: 11
       - name: "🐘 Setup Gradle"
         uses: gradle/actions/setup-gradle@v4
       - name: "🔨 Run Build"
         env:
           DEVELOCITY_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
-        run: ./gradlew build
+        run: ./gradlew build -Dgeb.env=chromeHeadless 
       - name: "📤 Publish Snapshot to repo.grails.org"
         if: success() && github.event_name == 'push'
         env:

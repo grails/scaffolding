@@ -60,6 +60,10 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
 
     ResourceLoader resourceLoader
     protected Map<String, View> generatedViewCache = new ConcurrentHashMap<>()
+    protected boolean enableReload = false
+    void setEnableReload(boolean enableReload) {
+        this.enableReload = enableReload
+    }
 
     protected String buildCacheKey(String viewName) {
         String viewCacheKey = groovyPageLocator.resolveViewFormat(viewName)
@@ -100,7 +104,7 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
         def view = super.loadView(viewName, locale)
         if (view == null) {
             String cacheKey = buildCacheKey(viewName)
-            view = generatedViewCache.get(cacheKey)
+            view = enableReload? null : generatedViewCache.get(cacheKey)
             if (view != null) {
                 return view
             } else {
@@ -130,7 +134,7 @@ class ScaffoldingViewResolver extends GroovyPageViewResolver implements Resource
                         def contents = new FastStringWriter()
                         t.make(model.asMap()).writeTo(contents)
 
-                        def template = templateEngine.createTemplate(new ByteArrayResource(contents.toString().getBytes(templateEngine.gspEncoding), "view:$cacheKey"))
+                        def template = templateEngine.createTemplate(new ByteArrayResource(contents.toString().getBytes(templateEngine.gspEncoding), "view:$cacheKey"), !enableReload)
                         view = new GroovyPageView()
                         view.setServletContext(getServletContext())
                         view.setTemplate(template)

@@ -27,7 +27,7 @@ dependencies {
     api "org.grails.plugins:fields:$fieldsVersion"
 
     compileOnly 'org.codehaus.groovy:groovy'
-    compileOnly 'org.grails:grails-plugin-rest'
+    api 'org.grails:grails-plugin-rest'
 }
 
 grailsPublish {

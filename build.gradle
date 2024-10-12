@@ -1,18 +1,16 @@
 plugins {
     id 'java-library'
-    id 'eclipse'
-    id 'idea'
     id 'org.grails.grails-plugin'
     id 'org.grails.grails-gsp'
     id 'org.grails.internal.grails-plugin-publish'
 }
 
-version project.projectVersion
-group "org.grails.plugins"
+version = project.projectVersion
+group = 'org.grails.plugins'
 
 repositories {
     mavenCentral()
-    maven { url "https://repo.grails.org/grails/core" }
+    maven { url = 'https://repo.grails.org/grails/core' }
 }
 
 java {
@@ -34,12 +32,12 @@ dependencies {
 }
 
 grailsPublish {
-    userOrg = "grails"
+    userOrg = 'grails'
     githubSlug = 'grails/scaffolding'
     license {
         name = 'Apache-2.0'
     }
-    title = "Grails Scaffolding Plugin"
-    desc = "Provides scaffolding for Grails applications"
-    developers = [puneetbehl: "Puneet Behl"]
+    title = 'Grails Scaffolding Plugin'
+    desc = 'Provides scaffolding for Grails applications'
+    developers = [puneetbehl: 'Puneet Behl']
 }

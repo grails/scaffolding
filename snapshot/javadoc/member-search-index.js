@@ -1,1 +1,1 @@
-memberSearchIndex = [{"p":"grails.plugin.scaffolding.annotation","c":"Scaffold","l":"domain()"},{"p":"grails.plugin.scaffolding.annotation","c":"Scaffold","l":"readOnly()"},{"p":"grails.plugin.scaffolding.annotation","c":"Scaffold","l":"value()"}];updateSearchResults();
+memberSearchIndex = [{"p":"grails.plugin.scaffolding.annotation","c":"Scaffold","l":"domain()"},{"p":"grails.plugin.scaffolding.annotation","c":"Scaffold","l":"readOnly()"},{"p":"grails.plugin.scaffolding.annotation","c":"Scaffold","l":"value()"}]

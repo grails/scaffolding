@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"grails.plugin.scaffolding.annotation","l":"Scaffold"}];updateSearchResults();
